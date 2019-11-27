@@ -64,4 +64,4 @@ testRun <- BREMSC(dataADT, dataRNA, K=4, nCores=5, nMCMC=20)
 * **Xinjun Wang**, Zhe Sun, Yanfu Zhang, Heng Huang, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. *Submitted* 2019.
 
 ## Contact
-[Xinjun Wang](xiw119@pitt.edu), [Wei Chen](http://www.pitt.edu/~wec47/index.html).
+[Xinjun Wang] (xiw119@pitt.edu), [Wei Chen](http://www.pitt.edu/~wec47/index.html).
