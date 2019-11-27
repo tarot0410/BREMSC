@@ -50,11 +50,13 @@ BREMSC returns a list object containing:
 
 ## Example:
 ```
-# Load pacakge
+# First load pacakge
 library(BREMSC)
-# Load the example simulated data (dataADT: protein data; dataRNA: RNA data)
+
+# Next load the example simulated data (dataADT: protein data; dataRNA: RNA data)
 data("dataADT")
 data("dataRNA")
+
 # Test run of BREMSC (using small number of MCMC here to save time)
 # nMCMC>200 is suggested in real application
 testRun <- BREMSC(dataADT, dataRNA, K=4, nCores=5, nMCMC=20)
