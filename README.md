@@ -59,6 +59,7 @@ data("dataRNA")
 
 # Test run of BREMSC (using small number of MCMC here to save time)
 # nMCMC>200 is suggested in real application
+# Parallel computing is highly recommended. nCores>=40 is recommended for ~10,000 cells.
 testRun <- BREMSC(dataADT, dataRNA, K=4, nCores=5, nMCMC=20)
 
 ```
