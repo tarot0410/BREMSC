@@ -10,7 +10,7 @@ See [Homepage @ Wei Chen's Lab](http://www.pitt.edu/~wec47/singlecell.html)
 
 ## Installation
 
-Install DIMMSC from Github
+Install BREMSC from Github
 ```
 library(devtools)
 install_github("tarot0410/BREMSC")
@@ -50,7 +50,7 @@ BREMSC returns a list object containing:
 
 ## Example:
 ```
-# First load pacakge
+# First load BREMSC R package
 library(BREMSC)
 
 # Next load the example simulated data (dataADT: protein data; dataRNA: RNA data)
