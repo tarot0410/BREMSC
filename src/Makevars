@@ -1,0 +1,3 @@
+C=/usr/local/opt/llvm/bin/clang
+CXX=/usr/local/opt/llvm/bin/clang++
+CXX1X=clang-omp++
