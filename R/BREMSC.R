@@ -791,11 +791,11 @@ jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, to
   # Initialize jointDIMMSC
   cat(paste0("Start initializing jointDIMMSC..."), "\n")
   # adt_data
-  clusters_initial_adt <- kmeans(t(as.matrix(log2(adt_data+1))),K)$cluster
-  alpha_adt <- EM_initial_alpha(adt_data,clusters_initial_adt,"Ronning")
+  clusters_initial_adt <- kmeans(t(as.matrix(log2(data1+1))),K)$cluster
+  alpha_adt <- EM_initial_alpha(data1,clusters_initial_adt,"Ronning")
   # rna_data
-  clusters_initial <- kmeans(t(as.matrix(log2(rna_data+1))),K)$cluster
-  alpha <- EM_initial_alpha(rna_data,clusters_initial,"Ronning")
+  clusters_initial <- kmeans(t(as.matrix(log2(data2+1))),K)$cluster
+  alpha <- EM_initial_alpha(data2,clusters_initial,"Ronning")
   
   # Start running jointDIMMSC
   cat(paste0("Start running jointDIMMSC..."), "\n")
