@@ -2,6 +2,7 @@
 % Please edit documentation in R/BREMSC.R
 \name{BREMSC}
 \alias{BREMSC}
+\alias{jointDIMMSC}
 \title{BREMSC function}
 \usage{
 BREMSC(
@@ -15,6 +16,16 @@ BREMSC(
   sd_alpha = 1,
   sd_b = 0.5,
   sigmaB = 0.8
+)
+
+jointDIMMSC(
+  dataProtein,
+  dataRNA,
+  K,
+  useGene = 100,
+  maxiter = 100,
+  tol = 1e-04,
+  lik.tol = 0.01
 )
 }
 \arguments{
@@ -37,6 +48,12 @@ BREMSC(
 \item{sd_b}{random walk depth for b}
 
 \item{sigmaB}{initial estimate of SD of random effects}
+
+\item{maxiter}{maximum number of iterations, with default value 100}
+
+\item{tol}{a convergence tolerance for the difference of vector pie between iterations, with default value 1e-4}
+
+\item{lik.tol}{a convergence tolerance for the difference of log-likelihoods between iterations, with default value 1e-2}
 }
 \value{
 BREMSC returns a list object containing:
@@ -50,9 +67,21 @@ BREMSC returns a list object containing:
   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 }
+
+jointDIMMSC returns a list object containing:
+
+\itemize{
+  \item clusterID: estimated label for each cell
+  \item posteriorProb: a C*K matrix with probability that each cell belongs to each cluster
+  \item logLik: estimated log likelihood
+  \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
+  \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
+}
 }
 \description{
 BREMSC function
+
+jointDIMMSC function
 }
 \examples{
 # Load the example data data_DIMMSC

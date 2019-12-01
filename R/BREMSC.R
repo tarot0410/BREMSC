@@ -654,77 +654,6 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
   return(list(pie=pie,delta=delta,alpha=alpha, alpha_adt=alpha_adt, mem=mem,loglik=loglik))
 }
 
-#' jointDIMMSC function
-#' @name jointDIMMSC
-#' @aliases jointDIMMSC
-#' @param dataProtein a D*C matrix with D proteins and C cells
-#' @param dataRNA a G*C matrix with G genes and C cells
-#' @param K number of desired clusters
-#' @param useGene number of genes to keep
-#' @param maxiter maximum number of iterations, with default value 100
-#' @param tol a convergence tolerance for the difference of vector pie between iterations, with default value 1e-4
-#' @param lik.tol a convergence tolerance for the difference of log-likelihoods between iterations, with default value 1e-2
-#' @return jointDIMMSC returns a list object containing:
-#' @return \itemize{
-#'   \item clusterID: estimated label for each cell
-#'   \item posteriorProb: a C*K matrix with probability that each cell belongs to each cluster
-#'   \item logLik: estimated log likelihood
-#'   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
-#'   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
-#' }
-#' @author Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.
-#' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Heng Huang, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
-#' @examples
-#' # Load the example data data_DIMMSC
-#' data("dataADT")
-#' data("dataRNA")
-#' # Test run of jointDIMMSC: use small number of MCMC to save time
-#' testRun = jointDIMMSC(dataADT, dataRNA, K=4)
-#' # End
-#' @import stats
-#' @export   
-jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, tol = 1e-4, lik.tol = 1e-2) { 
-  # Format input data
-  cat(paste0("Start loading data..."), "\n")
-  data1 <- data.matrix(dataProtein)
-  data2 <- data.matrix(dataRNA)
-  n = ncol(data1) # compute number of cells
-  
-  if (ncol(data1) != ncol(data2)) {
-    stop("Dimension of two data sources don't match. Check if each source of data is feature by cell,
-         and the cells should match in two sources.")
-  }
-  
-  # Keep only top genes (G = useGene)
-  cat(paste0("Start selecting top genes..."), "\n")
-  sd<-apply(data2,1,sd)
-  or<-order(sd)
-  or<-or[dim(data2)[1]:1]
-  or<-or[1:useGene]
-  list<-sort(or)
-  data2<-data2[list,]
-  
-  # Initialize jointDIMMSC
-  cat(paste0("Start initializing jointDIMMSC..."), "\n")
-  # adt_data
-  clusters_initial_adt <- kmeans(t(as.matrix(log2(adt_data+1))),K)$cluster
-  alpha_adt <- EM_initial_alpha(adt_data,clusters_initial_adt,"Ronning")
-  # rna_data
-  clusters_initial <- kmeans(t(as.matrix(log2(rna_data+1))),K)$cluster
-  alpha <- EM_initial_alpha(rna_data,clusters_initial,"Ronning")
-  
-  # Start running jointDIMMSC
-  cat(paste0("Start running jointDIMMSC..."), "\n")
-  jointDIMMSC_rslt <- EM_multinomial(data1, data2, K, alpha_adt, alpha, maxiter, tol, lik.tol)
-  
-  cat(paste0("All done!"), "\n")
-  return(list(clusterID = jointDIMMSC_rslt$mem,
-              posteriorProb = jointDIMMSC_rslt$delta,
-              logLik = jointDIMMSC_rslt$loglik,
-              alphaMtxProtein = jointDIMMSC_rslt$alpha_adt,
-              alphaMtxRNA = jointDIMMSC_rslt$alpha))
-}
-
 #' BREMSC function
 #' @name BREMSC
 #' @aliases BREMSC
@@ -819,6 +748,66 @@ BREMSC = function(dataProtein, dataRNA, K, nCores = 1, nMCMC = 500, useGene = 10
               alphaMtxRNA = alphaMtx2))
 }
 
+#' jointDIMMSC function
+#' @rdname BREMSC
+#' @param dataProtein a D*C matrix with D proteins and C cells
+#' @param dataRNA a G*C matrix with G genes and C cells
+#' @param K number of desired clusters
+#' @param useGene number of genes to keep
+#' @param maxiter maximum number of iterations, with default value 100
+#' @param tol a convergence tolerance for the difference of vector pie between iterations, with default value 1e-4
+#' @param lik.tol a convergence tolerance for the difference of log-likelihoods between iterations, with default value 1e-2
+#' @return jointDIMMSC returns a list object containing:
+#' @return \itemize{
+#'   \item clusterID: estimated label for each cell
+#'   \item posteriorProb: a C*K matrix with probability that each cell belongs to each cluster
+#'   \item logLik: estimated log likelihood
+#'   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
+#'   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
+#' }
+#' @import stats
+#' @export   
+jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, tol = 1e-4, lik.tol = 1e-2) { 
+  # Format input data
+  cat(paste0("Start loading data..."), "\n")
+  data1 <- data.matrix(dataProtein)
+  data2 <- data.matrix(dataRNA)
+  n = ncol(data1) # compute number of cells
+  
+  if (ncol(data1) != ncol(data2)) {
+    stop("Dimension of two data sources don't match. Check if each source of data is feature by cell,
+         and the cells should match in two sources.")
+  }
+  
+  # Keep only top genes (G = useGene)
+  cat(paste0("Start selecting top genes..."), "\n")
+  sd<-apply(data2,1,sd)
+  or<-order(sd)
+  or<-or[dim(data2)[1]:1]
+  or<-or[1:useGene]
+  list<-sort(or)
+  data2<-data2[list,]
+  
+  # Initialize jointDIMMSC
+  cat(paste0("Start initializing jointDIMMSC..."), "\n")
+  # adt_data
+  clusters_initial_adt <- kmeans(t(as.matrix(log2(adt_data+1))),K)$cluster
+  alpha_adt <- EM_initial_alpha(adt_data,clusters_initial_adt,"Ronning")
+  # rna_data
+  clusters_initial <- kmeans(t(as.matrix(log2(rna_data+1))),K)$cluster
+  alpha <- EM_initial_alpha(rna_data,clusters_initial,"Ronning")
+  
+  # Start running jointDIMMSC
+  cat(paste0("Start running jointDIMMSC..."), "\n")
+  jointDIMMSC_rslt <- EM_multinomial(data1, data2, K, alpha_adt, alpha, maxiter, tol, lik.tol)
+  
+  cat(paste0("All done!"), "\n")
+  return(list(clusterID = jointDIMMSC_rslt$mem,
+              posteriorProb = jointDIMMSC_rslt$delta,
+              logLik = jointDIMMSC_rslt$loglik,
+              alphaMtxProtein = jointDIMMSC_rslt$alpha_adt,
+              alphaMtxRNA = jointDIMMSC_rslt$alpha))
+}
 
 
 
