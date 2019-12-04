@@ -1,5 +1,5 @@
 # BREMSC
-**BREMSC** is an R package (with core functions *jointDIMMSC* and *BREMSC*) for joint clustering droplet-based scRNA-seq and CITE-seq data. *jointDIMMSC* is developed as a direct extension of DIMMSC, which assumes full indenpendency between single cell RNA and surface protein data. To take the correlation between two data sources into consideration, we further develope *BREMSC*, which uses random effects to incorporate the two data sources. This package can directly work on raw count data from droplet-based scRNA-seq and CITE-seq experiments without any data transformation, and it can provide clustering uncertainty for each cell.
+**BREMSC** is an R package (with core functions *jointDIMMSC* and *BREMSC*) for joint clustering droplet-based scRNA-seq and CITE-seq data. *jointDIMMSC* is developed as a direct extension of DIMMSC, which assumes full indenpendency between single cell RNA and surface protein data. To take the correlation between two data sources into consideration, we further develop *BREMSC*, which uses random effects to incorporate the two data sources. This package can directly work on raw count data from droplet-based scRNA-seq and CITE-seq experiments without any data transformation, and it can provide clustering uncertainty for each cell.
 
 Version: 0.1.0 (Date: 2019-11-26)
 
