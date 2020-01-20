@@ -3,7 +3,7 @@
 \name{BREMSC}
 \alias{BREMSC}
 \alias{jointDIMMSC}
-\title{BREMSC function}
+\title{A novel joint clustering method for scRNA-seq and CITE-seq data}
 \usage{
 BREMSC(
   dataProtein,
@@ -77,11 +77,17 @@ jointDIMMSC returns a list object containing:
   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 }
+# Load the example data data_DIMMSC
+data("dataADT")
+data("dataRNA")
+# Test run of BREMSC: use small number of MCMC to save time
+testRun = jointDIMMSC(dataADT, dataRNA, K=4)
+# End
 }
 \description{
-BREMSC function
+BREMSC is developed to joint cluster scRNA-seq and CITE-seq data with the introduction of random effects to incorporate the two data sources
 
-jointDIMMSC function
+jointDIMMSC is developed as a direct extension of DIMMSC without the introduction of random effects to incorporate the two data sources
 }
 \examples{
 # Load the example data data_DIMMSC
@@ -92,7 +98,7 @@ testRun = BREMSC(dataADT, dataRNA, K=4, nCores=5, nMCMC=20)
 # End
 }
 \references{
-Xinjun Wang, Zhe Sun, Yanfu Zhang, Heng Huang, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
+Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
 }
 \author{
 Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.

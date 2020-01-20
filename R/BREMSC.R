@@ -501,13 +501,13 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
   G <- dim(dataRNA)[1]
   n = nrow(dataProtein)
   p = ncol(dataProtein)
-  
-  
+
+
   differ=1
   iter=0
   loglik=1
   dif=100
-  
+
   while ( (differ > tol | dif > lik.tol) &  iter < maxiter ) {
     ## E-step: compute omega:
     ## ADT
@@ -518,14 +518,14 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
         num1_adt[j,k] <- sum(lgamma(dataProtein[,j]+alpha_adt[k,]) - lgamma(alpha_adt[k,]))
         num2_adt[j,k] <- lgamma(sum(alpha_adt[k,]))-lgamma(sum(alpha_adt[k,])+sum(dataProtein[,j]))
       }
-    
+
     delta_tmp_adt <- matrix(,J,K)
     for (j in 1:J){
       for (k in 1:K){
         delta_tmp_adt[j,k] <- num1_adt[j,k]+num2_adt[j,k]
       }
     }
-    
+
     ## RNA
     num1 <- matrix(0,J,K)
     num2 <- matrix(,J,K)
@@ -534,14 +534,14 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
         num1[j,k] <- sum(lgamma(dataRNA[,j]+alpha[k,]) - lgamma(alpha[k,]))
         num2[j,k] <- lgamma(sum(alpha[k,]))-lgamma(sum(alpha[k,])+sum(dataRNA[,j]))
       }
-    
+
     delta_tmp <- matrix(,J,K)
     for (j in 1:J){
       for (k in 1:K){
         delta_tmp[j,k] <- num1[j,k]+num2[j,k]+log(pie[k])
       }
     }
-    
+
     ########
     new_delta_tmp<-matrix(,J,K)
     for (j in 1:J){
@@ -561,14 +561,14 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
         delta[j,k] <- 1/(1+sum)
       }
     }
-    
+
     ## M-step: update pie and alpha
     # cat("start M-step\n")
     pie.new <- matrix(,1,K)
     for (k in 1:K){
       pie.new[1,k] <- sum(delta[,k])/J
     }
-    
+
     alpha_new <- matrix(,K,G)
     for (k in 1:K){
       den <- 0
@@ -601,48 +601,48 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
     for (i in 1:J){
       mem[i,1] <- which(delta[i,]==max(delta[i,]))
     }
-    
+
     sort <- rank(pie)
     res <- mem
     for(k in 1:K){
       res[which(mem==k)] <- sort[k]
     }
     mem <- res
-    
+
     num <- num1+num2+num1_adt+num2_adt
     lik <- matrix(,J,1)
     for(j in 1:J){
       lik[j,1] <- num[j,mem[j,]]
     }
     new.loglik <- sum(lik)
-    
+
     ## calculate diff to check convergence
     dif <- abs((new.loglik-loglik)/loglik*100)
-    
+
     sumd <- 0
     for (k in 1:K){
       diff <- (pie.new[k]-pie[k])^2
       sumd=diff+sumd
     }
-    
+
     differ=sqrt(abs(sumd))
     #differ=1;
     pie=pie.new;
     alpha=alpha_new;
     alpha_adt=alpha_adt_new;
     loglik <- new.loglik
-    
+
     for (k in 1:k){
       alpha[k,which(alpha[k,]==0)] <- 0.000001
     }
     for (k in 1:k){
       alpha_adt[k,which(alpha_adt[k,]==0)] <- 0.000001
     }
-    
+
     iter=iter+1;
     cat("Iter", iter, ", differ=", differ, "\n")
   }
-  
+
   mem <- matrix(,J,1)
   for (i in 1:J){
     if (length(which(delta[i,]==max(delta[i,])) )>1)
@@ -650,13 +650,14 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
     if (length(which(delta[i,]==max(delta[i,])) )==1)
     {mem[i,1] <- which(delta[i,]==max(delta[i,]))   }
   }
-  
+
   return(list(pie=pie,delta=delta,alpha=alpha, alpha_adt=alpha_adt, mem=mem,loglik=loglik))
 }
 
-#' BREMSC function
+#' A novel joint clustering method for scRNA-seq and CITE-seq data
+#'
+#' BREMSC is developed to joint cluster scRNA-seq and CITE-seq data with the introduction of random effects to incorporate the two data sources
 #' @name BREMSC
-#' @aliases BREMSC
 #' @param dataProtein a D*C matrix with D proteins and C cells
 #' @param dataRNA a G*C matrix with G genes and C cells
 #' @param K number of desired clusters
@@ -678,7 +679,7 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
 #'   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 #' }
 #' @author Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.
-#' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Heng Huang, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
+#' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
 #' @examples
 #' # Load the example data data_DIMMSC
 #' data("dataADT")
@@ -748,7 +749,9 @@ BREMSC = function(dataProtein, dataRNA, K, nCores = 1, nMCMC = 500, useGene = 10
               alphaMtxRNA = alphaMtx2))
 }
 
-#' jointDIMMSC function
+#' A faster version of algorithm for joint clustering scRNA-seq and CITE-seq data
+#'
+#' jointDIMMSC is developed as a direct extension of DIMMSC without the introduction of random effects to incorporate the two data sources
 #' @rdname BREMSC
 #' @param dataProtein a D*C matrix with D proteins and C cells
 #' @param dataRNA a G*C matrix with G genes and C cells
@@ -765,20 +768,26 @@ BREMSC = function(dataProtein, dataRNA, K, nCores = 1, nMCMC = 500, useGene = 10
 #'   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
 #'   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 #' }
+#' # Load the example data data_DIMMSC
+#' data("dataADT")
+#' data("dataRNA")
+#' # Test run of BREMSC: use small number of MCMC to save time
+#' testRun = jointDIMMSC(dataADT, dataRNA, K=4)
+#' # End
 #' @import stats
-#' @export   
-jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, tol = 1e-4, lik.tol = 1e-2) { 
+#' @export
+jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, tol = 1e-4, lik.tol = 1e-2) {
   # Format input data
   cat(paste0("Start loading data..."), "\n")
   data1 <- data.matrix(dataProtein)
   data2 <- data.matrix(dataRNA)
   n = ncol(data1) # compute number of cells
-  
+
   if (ncol(data1) != ncol(data2)) {
     stop("Dimension of two data sources don't match. Check if each source of data is feature by cell,
          and the cells should match in two sources.")
   }
-  
+
   # Keep only top genes (G = useGene)
   cat(paste0("Start selecting top genes..."), "\n")
   sd<-apply(data2,1,sd)
@@ -787,7 +796,7 @@ jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, to
   or<-or[1:useGene]
   list<-sort(or)
   data2<-data2[list,]
-  
+
   # Initialize jointDIMMSC
   cat(paste0("Start initializing jointDIMMSC..."), "\n")
   # adt_data
@@ -796,11 +805,11 @@ jointDIMMSC = function(dataProtein, dataRNA, K, useGene = 100, maxiter = 100, to
   # rna_data
   clusters_initial <- kmeans(t(as.matrix(log2(data2+1))),K)$cluster
   alpha <- EM_initial_alpha(data2,clusters_initial,"Ronning")
-  
+
   # Start running jointDIMMSC
   cat(paste0("Start running jointDIMMSC..."), "\n")
   jointDIMMSC_rslt <- EM_multinomial(data1, data2, K, alpha_adt, alpha, maxiter, tol, lik.tol)
-  
+
   cat(paste0("All done!"), "\n")
   return(list(clusterID = jointDIMMSC_rslt$mem,
               posteriorProb = jointDIMMSC_rslt$delta,
