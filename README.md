@@ -98,7 +98,7 @@ data("dataADT")
 data("dataRNA")
 
 # Test run of BREMSC (using small number of MCMC here to save time)
-testRun <- BREMSC(dataADT, dataRNA, K=4, nCores=2, nMCMC=100)
+testRun <- BREMSC(dataADT, dataRNA, K=4, nChains=2, nMCMC=100)
 
 # Check convergence of log likelihoos
 plot(testRun$vecLogLik, type = "l", xlab = "MCMC Iterations", ylab = "Log likelihood") # consider to increase the number of MCMCs if the log likelihood doesn't look like converged
