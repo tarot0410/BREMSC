@@ -9,12 +9,10 @@ BREMSC(
   dataProtein,
   dataRNA,
   K,
-  nCores = 1,
-  nMCMC = 500,
-  useGene = 100,
-  diagnostic = T,
-  sd_alpha = 1,
-  sd_b = 0.5,
+  nCores = 3,
+  nMCMC = 1000,
+  sd_alpha_range = c(0.5, 1.5),
+  sd_b_range = c(0.2, 1),
   sigmaB = 0.8
 )
 
@@ -22,7 +20,6 @@ jointDIMMSC(
   dataProtein,
   dataRNA,
   K,
-  useGene = 100,
   maxiter = 100,
   tol = 1e-04,
   lik.tol = 0.01
@@ -35,17 +32,13 @@ jointDIMMSC(
 
 \item{K}{number of desired clusters}
 
-\item{nCores}{number of CPUs to use}
+\item{nCores}{number of MCMC chains to run in parallel, each using a CPU}
 
 \item{nMCMC}{number of MCMCs}
 
-\item{useGene}{number of genes to keep}
+\item{sd_alpha_range}{range of random walk depth for alpha}
 
-\item{diagnostic}{whether store a dignostic plot}
-
-\item{sd_alpha}{random walk depth for alpha}
-
-\item{sd_b}{random walk depth for b}
+\item{sd_b_range}{range of random walk depth for b}
 
 \item{sigmaB}{initial estimate of SD of random effects}
 
@@ -61,11 +54,13 @@ BREMSC returns a list object containing:
 \itemize{
   \item clusterID: estimated label for each cell
   \item posteriorProb: a C*K matrix with probability that each cell belongs to each cluster
-  \item sdRF: estimated SD of random effects
-  \item logLik: estimated log likelihood
+  \item sdRF_final: estimated SD of random effects
+  \item logLik_final: estimated log likelihood
   \item vecB: estimated random effects for each cell
   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
+  \item vecLogLik: estimated log likelihood for each MCMC
+  \item vecSDRF: estimated SD of random effects for each MCMC
 }
 
 jointDIMMSC returns a list object containing:
@@ -94,7 +89,7 @@ jointDIMMSC is developed as a direct extension of DIMMSC without the introductio
 data("dataADT")
 data("dataRNA")
 # Test run of BREMSC: use small number of MCMC to save time
-testRun = BREMSC(dataADT, dataRNA, K=4, nCores=5, nMCMC=20)
+testRun = BREMSC(dataADT, dataRNA, K=4)
 # End
 }
 \references{
