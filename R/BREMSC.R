@@ -442,13 +442,13 @@ multiChainGibbs = function(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, 
 #'   \item vecSDRF: estimated SD of random effects for each MCMC
 #' }
 #' @author Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.
-#' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
+#' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Hongyi Xin, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
 #' @examples
 #' # Load the example data data_DIMMSC
 #' data("dataADT")
 #' data("dataRNA")
 #' # Test run of BREMSC: use small number of MCMC to save time
-#' testRun = BREMSC(dataADT, dataRNA, K=4)
+#' testRun = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
 #' # End
 #' @import stats
 #' @export

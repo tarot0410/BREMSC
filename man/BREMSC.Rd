@@ -9,7 +9,7 @@ BREMSC(
   dataProtein,
   dataRNA,
   K,
-  nCores = 3,
+  nChains = 3,
   nMCMC = 1000,
   sd_alpha_range = c(0.5, 1.5),
   sd_b_range = c(0.2, 1),
@@ -32,7 +32,7 @@ jointDIMMSC(
 
 \item{K}{number of desired clusters}
 
-\item{nCores}{number of MCMC chains to run in parallel, each using a CPU}
+\item{nChains}{number of MCMC chains to run in parallel, each using a CPU}
 
 \item{nMCMC}{number of MCMCs}
 
@@ -89,11 +89,11 @@ jointDIMMSC is developed as a direct extension of DIMMSC without the introductio
 data("dataADT")
 data("dataRNA")
 # Test run of BREMSC: use small number of MCMC to save time
-testRun = BREMSC(dataADT, dataRNA, K=4)
+testRun = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
 # End
 }
 \references{
-Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
+Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Hongyi Xin, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
 }
 \author{
 Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.
