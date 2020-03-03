@@ -444,11 +444,15 @@ multiChainGibbs = function(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, 
 #' @author Xinjun Wang <xiw119@pitt.edu>, Zhe Sun <zhs31@pitt.edu>, Wei Chen <wei.chen@chp.edu>.
 #' @references Xinjun Wang, Zhe Sun, Yanfu Zhang, Zhongli Xu, Hongyi Xin, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. Submitted 2019.
 #' @examples
-#' # Load the example data data_DIMMSC
+#' # Load the example data
 #' data("dataADT")
 #' data("dataRNA")
-#' # Test run of BREMSC: use small number of MCMC to save time
-#' testRun = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
+#' # Test run of jointDIMM-SC
+#' testRun_joint = jointDIMMSC(dataADT, dataRNA, K=4)
+#' # Test run of BREM-SC: use small number of MCMC to save time
+#' testRun_BREMSC = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
+#' # Check convergence of log likelihoos
+#' plot(testRun_BREMSC$vecLogLik, type = "l", xlab = "MCMC Iterations", ylab = "Log likelihood")
 #' # End
 #' @import stats
 #' @export
@@ -694,12 +698,6 @@ EM_multinomial = function(dataProtein, dataRNA, K, alpha_adt, alpha, maxiter, to
 #'   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
 #'   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 #' }
-#' # Load the example data data_DIMMSC
-#' data("dataADT")
-#' data("dataRNA")
-#' # Test run of BREMSC: use small number of MCMC to save time
-#' testRun = jointDIMMSC(dataADT, dataRNA, K=4)
-#' # End
 #' @import stats
 #' @export
 jointDIMMSC = function(dataProtein, dataRNA, K, maxiter = 100, tol = 1e-4, lik.tol = 1e-2) {

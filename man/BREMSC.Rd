@@ -72,12 +72,6 @@ jointDIMMSC returns a list object containing:
   \item alphaMtxProtein: a K*D matrix of alpha estimates for protein source
   \item alphaMtxRNA: a K*G matrix of alpha estimates for RNA source
 }
-# Load the example data data_DIMMSC
-data("dataADT")
-data("dataRNA")
-# Test run of BREMSC: use small number of MCMC to save time
-testRun = jointDIMMSC(dataADT, dataRNA, K=4)
-# End
 }
 \description{
 BREMSC is developed to joint cluster scRNA-seq and CITE-seq data with the introduction of random effects to incorporate the two data sources
@@ -85,11 +79,15 @@ BREMSC is developed to joint cluster scRNA-seq and CITE-seq data with the introd
 jointDIMMSC is developed as a direct extension of DIMMSC without the introduction of random effects to incorporate the two data sources
 }
 \examples{
-# Load the example data data_DIMMSC
+# Load the example data
 data("dataADT")
 data("dataRNA")
-# Test run of BREMSC: use small number of MCMC to save time
-testRun = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
+# Test run of jointDIMM-SC
+testRun_joint = jointDIMMSC(dataADT, dataRNA, K=4)
+# Test run of BREM-SC: use small number of MCMC to save time
+testRun_BREMSC = BREMSC(dataADT, dataRNA, K=4, nMCMC = 200)
+# Check convergence of log likelihoos
+plot(testRun_BREMSC$vecLogLik, type = "l", xlab = "MCMC Iterations", ylab = "Log likelihood")
 # End
 }
 \references{
