@@ -100,6 +100,7 @@ data("dataRNA")
 
 # Test run of BREMSC (using small number of MCMC here to save time)
 testRun <- BREMSC(dataADT, dataRNA, K=4, nCores=2, nMCMC=100)
+
 # Check convergence of log likelihoos
 plot(testRun$vecLogLik) # consider to increase the number of MCMCs if the log likelihood doesn't look like converged
 ```
