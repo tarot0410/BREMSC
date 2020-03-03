@@ -424,7 +424,7 @@ multiChainGibbs = function(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, 
 #' @param dataProtein a D*C matrix with D proteins and C cells
 #' @param dataRNA a G*C matrix with G genes and C cells
 #' @param K number of desired clusters
-#' @param nCores number of MCMC chains to run in parallel, each using a CPU
+#' @param nChains number of MCMC chains to run in parallel, each using a CPU
 #' @param nMCMC number of MCMCs
 #' @param sd_alpha_range range of random walk depth for alpha
 #' @param sd_b_range range of random walk depth for b
@@ -452,7 +452,7 @@ multiChainGibbs = function(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, 
 #' # End
 #' @import stats
 #' @export
-BREMSC = function(dataProtein, dataRNA, K, nCores = 3, nMCMC = 1000,
+BREMSC = function(dataProtein, dataRNA, K, nChains = 3, nMCMC = 1000,
                   sd_alpha_range = c(0.5, 1.5), sd_b_range = c(0.2, 1), sigmaB = 0.8) {
   # Format input data
   cat(paste0("Start loading data..."), "\n")
@@ -478,8 +478,8 @@ BREMSC = function(dataProtein, dataRNA, K, nCores = 3, nMCMC = 1000,
 
   # Decide to use single core coding or multi-core coding
   cat(paste0("Start running BREMSC..."), "\n")
-  if (nCores > 1) {
-    BREM_rslt <- multiChainGibbs(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, nMCMC, nCores)
+  if (nChains > 1) {
+    BREM_rslt <- multiChainGibbs(data1, data2, sd_alpha_range, sd_b_range, sigmaB, K, nMCMC, nChains)
   } else {
     BREM_rslt <- startMCMC_singleGibbs(data1, data2, sum(sd_alpha_range)/2, sum(sd_b_range)/2, sigmaB, K, nMCMC)
   }
