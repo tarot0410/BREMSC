@@ -59,7 +59,7 @@ testRun <- jointDIMMSC(dataADT, dataRNA, K=4)
 
 # Function *BREMSC*
 ## Introduction
-Similar to *jointDIMMSC*, *BREMSC* uses separate Dirichlet mixture priors to characterize variations across cell types for each data source, but it further uses random effects to incorporate the two data sources. A Bayesian framework with Gibbs-sampling is used for parameter estimation. The computational speed for *BREMSC* is much slower than *jointDIMMSC*. In practice, nMCMC>500 is suggested in real application, and running with more than 3 chains (set as a parameter) are strongly recommended for better stability.
+Similar to *jointDIMMSC*, *BREMSC* uses separate Dirichlet mixture priors to characterize variations across cell types for each data source, but it further uses random effects to incorporate the two data sources. A Bayesian framework with Gibbs-sampling is used for parameter estimation. The computational speed for *BREMSC* is much slower than *jointDIMMSC*. In practice, nMCMC>500 is suggested in real application, and running with more than 3 chains (set as a parameter) are strongly recommended for better stability. Also, a prescreening of RNA features is necessary to help reduce time and noise for BREM-SC. It is recommended to use less than 1000 RNA features.
 
 ## Usage
 ```
@@ -68,7 +68,7 @@ BREMSC(dataProtein, dataRNA, K, nChains = 3, nMCMC = 1000, sd_alpha = c(0.5, 1.5
 
 ## Arguments
 * *dataProtein* : a D*C matrix with D proteins and C cells
-* *dataRNA* : a G*C matrix with G genes and C cells
+* *dataRNA* : a G*C matrix with G genes and C cells, recommended to do prescreening of RNA features (<=1000) before running BREM-SC
 * *K* : number of desired clusters
 * *nChains* : number of chains to run in parallel (need to have >= nChains number of threads available), 3-5 is recommended, default 3
 * *nMCMC* : number of MCMCs, default 1000
