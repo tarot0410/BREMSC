@@ -105,7 +105,7 @@ plot(testRun$vecLogLik, type = "l", xlab = "MCMC Iterations", ylab = "Log likeli
 ```
 
 ## Publications
-* **Xinjun Wang**, Zhe Sun, Yanfu Zhang, Zhongli Xu, Hongyi Xin, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. [*Nucleic Acids Research* 2020] (https://doi.org/10.1093/nar/gkaa314).
+* **Xinjun Wang**, Zhe Sun, Yanfu Zhang, Zhongli Xu, Hongyi Xin, Heng Huang, Richard H Duerr, Kong Chen, Ying Ding, Wei Chen. BREM-SC: A Bayesian Random Effects Mixture Model for Joint Clustering Single Cell Multi-omics Data. [*Nucleic Acids Research* 2020](https://doi.org/10.1093/nar/gkaa314).
 
 ## Contact
 Xinjun Wang (xiw119@pitt.edu), [Wei Chen](http://www.pitt.edu/~wec47/index.html).
